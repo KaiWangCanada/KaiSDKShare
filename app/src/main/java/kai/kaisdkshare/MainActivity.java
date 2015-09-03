@@ -10,6 +10,7 @@ import android.view.View;
 
 import java.util.HashMap;
 
+import cn.sharesdk.facebook.Facebook;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }); // 设置分享事件回调
-// 执行图文分享
+        // 执行图文分享
         sm.share(sp);    }
 
     public void authorize(View view) {
@@ -106,11 +107,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void unauthorize(View view) {
-        Platform qzone = ShareSDK.getPlatform(this, QQ.NAME);
-        if (qzone.isValid ()) {
-            qzone.removeAccount();
+        Platform qq = ShareSDK.getPlatform(this, QQ.NAME);
+        if (qq.isValid ()) {
+            qq.removeAccount();
         }
-        qzone.setPlatformActionListener(new PlatformActionListener() {
+        qq.setPlatformActionListener(new PlatformActionListener() {
             @Override
             public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
                 Log.v("kai", "delete");
@@ -126,8 +127,39 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        qzone.authorize();
+        qq.authorize();
         //isValid和removeAccount不开启线程，会直接返回。
+
+    }
+
+    public void fblogin(View view) {
+        final Platform fb = ShareSDK.getPlatform(this, Facebook.NAME);
+
+        fb.setPlatformActionListener(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                Log.v("kai", "login");
+                Log.v("kai", "token: " + fb.getDb().getToken());
+                Log.v("kai", "token sec: " + fb.getDb().getTokenSecret());
+                Log.v("kai", "name: " + fb.getDb().getUserName());
+                Log.v("kai", "icon: " + fb.getDb().getUserIcon());
+                Log.v("kai", "expire time: " + fb.getDb().getExpiresTime());
+                Log.v("kai", "gender: " + fb.getDb().getUserGender());
+
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+
+            }
+        });
+
+        fb.authorize();
 
     }
 
