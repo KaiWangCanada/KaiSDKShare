@@ -19,6 +19,7 @@ import cn.sharesdk.system.text.ShortMessage;
 import cn.sharesdk.tencent.qq.QQ;
 
 public class MainActivity extends AppCompatActivity {
+    String url = "https://www.google.ca/images/nav_logo100633543.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }); // 设置分享事件回调
         // 执行图文分享
-        sm.share(sp);    }
+        sm.share(sp);
+    }
 
     public void authorize(View view) {
 //        Platform platform = ShareSDK.getPlatform(this, SinaWeibo.NAME);
@@ -161,6 +163,36 @@ public class MainActivity extends AppCompatActivity {
 
         fb.authorize();
 
+    }
+
+    public void fbshare(View view) {
+        Facebook.ShareParams fbs = new Facebook.ShareParams();
+        fbs.setText("hello world!");
+        fbs.setImageUrl(url);
+//        fbs.setImageData(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+//        sp.setImagePath("/mnt/sdcard/测试分享的图片.jpg");
+
+        Platform fb = ShareSDK.getPlatform(Facebook.NAME);
+//        fb.
+        fb.setPlatformActionListener(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                Log.v("kai", "shared");
+
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                Log.v("kai", "error");
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+
+            }
+        }); // 设置分享事件回调
+
+        fb.share(fbs);
     }
 
 }
